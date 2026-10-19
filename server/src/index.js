@@ -54,7 +54,20 @@ app.post("/api/chat", async (req, res) => {
       });
     }
 
-    const { message, history = [] } = req.body ?? {};
+    const { message, history = [], persona = "general" } = req.body ?? {};
+
+    const personaInstructions = {
+      general:
+        "You are CampusBot, an intelligent and modern AI assistant. Give clear, well-structured, insightful, and helpful answers. Format code blocks using markdown syntax when relevant.",
+      code:
+        "You are CampusBot in Code Architect mode. You specialize in clean, modular, production-ready software engineering, algorithms, and debugging. Provide clear explanations and clean markdown code snippets.",
+      creative:
+        "You are CampusBot in Creative Muse mode. You specialize in innovative brainstorming, storytelling, design thinking, and compelling writing with rich vocabulary and imagination.",
+      brief:
+        "You are CampusBot in Executive Brief mode. You prioritize high-signal, bulleted, decisive summaries and actionable takeaways. Avoid fluff."
+    };
+
+    const systemInstruction = personaInstructions[persona] || personaInstructions.general;
 
     if (typeof message !== "string" || !message.trim()) {
       return res.status(400).json({
@@ -103,11 +116,8 @@ app.post("/api/chat", async (req, res) => {
       model,
       contents,
       config: {
-        systemInstruction:
-          "You are CampusBot, a friendly and helpful website AI assistant. " +
-          "Give clear, accurate, concise answers. If you are uncertain, say so. " +
-          "Never claim to have performed an action you did not perform.",
-        maxOutputTokens: 800,
+        systemInstruction,
+        maxOutputTokens: 1200,
       },
     });
 
