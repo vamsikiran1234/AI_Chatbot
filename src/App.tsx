@@ -653,7 +653,7 @@ export default function App() {
         </header>
 
         {/* Conversation Stream Container */}
-        <div className="dialogue-container">
+        <div className={`dialogue-container ${currentSession.messages.length === 0 ? "is-empty" : ""}`}>
           {currentSession.messages.length === 0 ? (
             <div className="atelier-hero-welcome">
               {/* Dynamic Kinetic Core Orb */}
@@ -661,7 +661,7 @@ export default function App() {
                 <div className="core-glow-layer" />
                 <div className="core-rings" />
                 <div className="core-icon-center">
-                  <Sparkles size={28} />
+                  <Sparkles size={22} />
                 </div>
               </div>
 
